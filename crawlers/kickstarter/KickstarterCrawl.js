@@ -26,12 +26,12 @@ PRIMARY MODULES & VARS
 */
 
 var base_url = "http://www.kickstarter.com/discover/ending-soon?page=",
-	request  = require("request"),
-	cheerio  = require("cheerio"),
-	under    = require("underscore"),
-	fs       = require("fs"),
-	child    = require("child_process"),
-	exec     = child.exec;
+    request  = require("request"),
+    cheerio  = require("cheerio"),
+    under    = require("underscore"),
+    fs       = require("fs"),
+    child    = require("child_process"),
+    exec     = child.exec;
 
 function PrintElements(array) {
 	for(var i = 0; i < array.length; i++) {
