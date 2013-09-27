@@ -1,0 +1,19 @@
+{"author":"Darrell Etherington","count":110,"percent":"34.0"}
+{"author":"Eliza Brooke","count":10,"percent":"3.1"}
+{"author":"Chris Velazco","count":20,"percent":"6.2"}
+{"author":"John Biggs","count":21,"percent":"6.5"}
+{"author":"Natasha Lomas","count":80,"percent":"24.7"}
+{"author":"Ingrid Lunden","count":10,"percent":"3.1"}
+{"author":"Greg Kumparak","count":10,"percent":"3.1"}
+{"author":"Jordan Crook","count":10,"percent":"3.1"}
+{"author":"Catherine Shu","count":10,"percent":"3.1"}
+{"author":"Romain Dillet","count":10,"percent":"3.1"}
+{"author":"Stephanie Yang","count":10,"percent":"3.1"}
+{"author":"Mg Siegler","count":5,"percent":"1.5"}
+{"author":"Devin Coldewey","count":5,"percent":"1.5"}
+{"author":"Matt Burns","count":7,"percent":"2.2"}
+{"author":"akismet-2d1ebbbb94e8a85634586d7896e9fd62","count":1,"percent":"0.3"}
+{"author":"Erick Schonfeld","count":2,"percent":"0.6"}
+{"author":"Serkan Toto","count":1,"percent":"0.3"}
+{"author":"Steve O'Hear","count":1,"percent":"0.3"}
+{"author":"Robin Wauters","count":1,"percent":"0.3"}
