@@ -1,14 +1,14 @@
 var cheerio  = require("cheerio"),
-	request  = require("request"),
-		 fs  = require("fs"),
-	base_url = "http://www.rockethub.com/projects/live?page=",
-	proj_url = "http://www.rockethub.com";
+    request  = require("request"),
+         fs  = require("fs"),
+    base_url = "http://www.rockethub.com/projects/live?page=",
+    proj_url = "http://www.rockethub.com";
 
 function TotalPages(err, res, html) {
 	if(err) {throw err;}
 	var data = cheerio.load(html);
 	var last = data(".last a").attr("href");
-		last = last.split("");
+	    last = last.split("");
 	var lp = [];
 
 	//console.log(last.length);
