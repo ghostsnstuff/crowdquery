@@ -5,11 +5,12 @@ var cheerio  = require("cheerio"),
     proj_url = "http://www.rockethub.com";
 
 function TotalPages(err, res, html) {
+	var lp = [];
 	if(err) {throw err;}
 	var data = cheerio.load(html);
 	var last = data(".last a").attr("href");
 	    last = last.split("");
-	var lp = [];
+	
 
 	//console.log(last.length);
 	//last = "/projects/live?page=99";
