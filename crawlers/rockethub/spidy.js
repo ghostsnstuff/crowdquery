@@ -48,11 +48,16 @@ function IterateRequests(times) {
 function TestTime(err, res, html) {
 	if(err) {throw err;}
 	var data = cheerio.load(html);
-	var proj = data(".project-box").html();
+	var proj = data("#content-area").each(function() {
+		data(this).find("div").each(function() {
+			//console.log(data(this).html());
+		});
+	});
+
 	//console.log(proj);
 	for(var i = 0; i < 9; i++) {
 
-		var time = data(".days-left-label").eq(i).text().trim();
+/*		var time = data(".days-left-label").eq(i).text().trim();
 		time = time.split(" ");
 		time = time[0];
 		//console.log(time);
@@ -60,6 +65,15 @@ function TestTime(err, res, html) {
 		var hrs = data(".days-left-count").eq(i).text().trim();
 		//cconsole.log(hrs);
 		//console.log(testNum(hrs));
+*/
+		var time = data("#content-area").html();
+	//	console.log(time);
+		$ = cheerio.load(time);
+		time = $('.time-remaining').eq(i).data('timelabel');
+		time = time.split(" ");
+		time = time[0];
+		var hrs = $(".time-remaining").eq(i).data('timenumber');
+//		console.log(time + " " + hrs);
 		if(testText(time) && testNum(hrs)) {
 			//console.log("get link");
 			//console.log(time);
@@ -68,17 +82,17 @@ function TestTime(err, res, html) {
 			var url = data(".overlay").eq(i).children().first().attr("href");
 			url = proj_url+url;
 			//console.log(url);
-			/*
-			var content = fs.readFileSync("/Users/jaredhalpert/Desktop/Sublime/nodejs/scraping/hub/pjs.txt", "utf-8");
+			
+			var content = fs.readFileSync("test.txt", "utf-8");
 			content = content.split("\n");
 
 			if(content.indexOf(url) === -1) {
-				fs.appendFile("/Users/jaredhalpert/Desktop/Sublime/nodejs/scraping/hub/pjs.txt", url+"\n", function(err) {
+				fs.appendFile("test.txt", url+"/n", function(err) {
 					if(err) {throw err;}
 				}); // end appendFile
-				console.log("appended:  "+url);
+				console.log(time + " " + hrs + " appended:  "+url);
 			}	
-			*/
+			
 		} // end time / num constraint test
 
 	} // end page for loop
