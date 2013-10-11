@@ -87,7 +87,7 @@ function TestTime(err, res, html) {
 			content = content.split("\n");
 
 			if(content.indexOf(url) === -1) {
-				fs.appendFile("test.txt", url+"\n", function(err) {
+				fs.appendFile("test.txt", url+"/n", function(err) {
 					if(err) {throw err;}
 				}); // end appendFile
 				console.log(time + " " + hrs + " appended:  "+url);
