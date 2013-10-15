@@ -106,9 +106,16 @@ function dataCrawl(err, res, html) {
 	//prints the data from the json to the console
 	for(var i=1; i<14; i++) {
 		console.log(ksStats.stats[i]);
-		fs.appendFile("ksStatsPageData", JSON.stringify(ksStats.stats[i]) + "\n", function(err) {
-			if(err) {throw err;}
-		});
+		if(i<13) {
+			fs.appendFile("ksStatsPageData", JSON.stringify(ksStats.stats[i]) + ",\n", function(err) {
+				if(err) {throw err;}
+			});
+		}
+		else {
+			fs.appendFile("ksStatsPageData", JSON.stringify(ksStats.stats[i]) + "\n", function(err) {
+				if(err) {throw err;}
+			});
+		}
 	}
 
 	fs.appendFile("ksStatsPageData", "]\n", function(err) {
