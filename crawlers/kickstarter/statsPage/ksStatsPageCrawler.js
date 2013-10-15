@@ -49,7 +49,7 @@ function dataCrawl(err, res, html) {
 	// pushes them to the header array for later use
 	for(var i=0; i<24; i++) {
 		var headerResult = data(".header th").eq(i).text().trim();
-		headers.push(headerResult);
+		headers.push(headerResult.replace("\n\n",' ').replace('\n',' '));
 	}
 
 	//loop that matches our data, headers, and categories to be
@@ -85,26 +85,35 @@ function dataCrawl(err, res, html) {
 				propertyIndex += 8;
 
 			//sets property to the appropraite header of the header array
-			property = headers[propertyIndex];
+			property = headers[propertyIndex].replace("\n"," ");
 			//adds to the current category the property of the current data cell
 			// with the value of the current data cell
-			ksStats.stats[j][property] = result;
+			ksStats.stats[j][property] = result.replace(',','');
 		}
 			
 		
 	}
 
-
+/*
 	//prints the data filled json to the ksStatsPageData
 	fs.appendFile("ksStatsPageData", JSON.stringify(ksStats)+"\n\n", function(err) {
 		if(err){throw err;}
 	});
-
+*/
+	fs.appendFile("ksStatsPageData", "[\n", function(err) {
+		if(err){throw err;}
+	});
 	//prints the data from the json to the console
 	for(var i=1; i<14; i++) {
 		console.log(ksStats.stats[i]);
+		fs.appendFile("ksStatsPageData", JSON.stringify(ksStats.stats[i]) + "\n", function(err) {
+			if(err) {throw err;}
+		});
 	}
 
+	fs.appendFile("ksStatsPageData", "]\n", function(err) {
+		if(err){throw err;}
+	});
 
 }
 
