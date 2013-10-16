@@ -104,7 +104,7 @@ function dataCrawl(err, res, html) {
 		if(err){throw err;}
 	});
 	//prints the data from the json to the console
-	for(var i=1; i<14; i++) {
+	for(var i=0; i<14; i++) {
 		console.log(ksStats.stats[i]);
 		if(i<13) {
 			fs.appendFile("ksStatsPageData", JSON.stringify(ksStats.stats[i]) + ",\n", function(err) {
