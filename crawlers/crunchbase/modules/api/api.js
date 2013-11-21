@@ -10,10 +10,6 @@ var Api = function() {};
 var localApi = new Api();
 exports.Api = Api;
 
-Api.prototype.log = function(word) {
-	console.log(word);
-}
-
 Api.prototype.printData = function(data) {
 	console.log(data);
 }
@@ -38,16 +34,16 @@ Api.prototype.fetchJSON = function() {
 
 Api.prototype.fetchKeyValue = function(json, key) {
 	for(var data in json) {
-		if(data === key) {
-			return json[data];
-		}
+	   if(data === key) {
+		return json[data];
+	   }
 	}
 }
 
 Api.prototype.goCrawl = function(array) {
 	for(var i = 0; i < array.length; i++) {
-		var tempHREF = localApi.fetchKeyValue(array[i], 'href');
-		request(tempHREF, localApi.crawl);		
+	    var tempHREF = localApi.fetchKeyValue(array[i], 'href');
+	    request(tempHREF, localApi.crawl);		
 	}
 }
 
@@ -58,8 +54,8 @@ Api.prototype.crawl = function(err, res, html) {
 	localApi.addJSON(api);
 	crawlCOUNT++;
 	if(crawlCOUNT === 450) {
-			console.log('writing bigJSON');
-			localApi.writeJSON(bigJSON);
+	   console.log('writing bigJSON');
+	   localApi.writeJSON(bigJSON);
 	}
 }
 
@@ -70,9 +66,9 @@ Api.prototype.fetchDataLinks = function(data) {
 	while(moreLinks) {
 		var api_link = data('.col3_content a').eq(k).attr('href');
 		if(api_link == undefined) {
-			moreLinks = false;
+		   moreLinks = false;
 		} else {
-			links.push(api_link);
+		   links.push(api_link);
 		}
 		k++;
 	}
@@ -82,14 +78,14 @@ Api.prototype.fetchDataLinks = function(data) {
 Api.prototype.apiMatch = function(hrefs) {
 	for(var i = 0; i < hrefs.length; i++) {
 		var curr_href = hrefs[i],
-				one = curr_href[curr_href.length-1],
-				two = curr_href[curr_href.length-2],
-				three = curr_href[curr_href.length-3],
-				temp_match = three+two+one;
+		    one = curr_href[curr_href.length-1],
+		    two = curr_href[curr_href.length-2],
+		    three = curr_href[curr_href.length-3],
+		    temp_match = three+two+one;
 		if(temp_match == '.js') {
-			api_match = curr_href;
-			api_match = api_url1 + api_match + api_key;	
-			return api_match;
+		    api_match = curr_href;
+		    api_match = api_url1 + api_match + api_key;	
+		    return api_match;
 		}
 	}
 }
