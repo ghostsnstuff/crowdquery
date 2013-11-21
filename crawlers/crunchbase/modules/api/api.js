@@ -18,8 +18,8 @@ Api.prototype.printData = function(data) {
 	console.log(data);
 }
 var bigJSON = [],
-		jsonCOUNT = 0,
-		crawlCOUNT = 1;		
+    jsonCOUNT = 0,
+    crawlCOUNT = 1;		
 
 Api.prototype.readJSON = function() {
 	fs.readFile('/Users/jaredhalpert/crowdquery/crawlers/crunchbase/modules/api/api.json', function(err, data) {
