@@ -1,9 +1,9 @@
 var cheerio = require('cheerio'),
-		request = require('request'),
-		fs = require('fs');
+    request = require('request'),
+    fs = require('fs');
 
 var api_url1 = 'http://api.crunchbase.com',
-		api_key = '?api_key=9tnkpa2fdm7mf4ef2ubsazwy';
+    api_key = '?api_key=9tnkpa2fdm7mf4ef2ubsazwy';
 
 var Api = function() {};
 var localApi = new Api();
