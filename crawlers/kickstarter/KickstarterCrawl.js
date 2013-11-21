@@ -97,8 +97,8 @@ function IteratePageRequests(n) {
 // queue behavior 
 IteratePageRequests(6);
 console.log("request initiated");	
-
-exec("g++ count.cpp -o count", function(err, stdout, stderr) {
+/*
+exec("g++ /Users/jaredhalpert/Desktop/sublime/nodejs/scraping/soon/count.cpp -o count", function(err, stdout, stderr) {
 	if(err) {throw err;}
 	console.log(stdout);
 }); // end compile exec()
@@ -107,4 +107,4 @@ exec("open count", function(err, stdout, stderr) {
 	if(err) {throw err;}
 	console.log(stdout);
 }) // end open exec()
-
+*/
