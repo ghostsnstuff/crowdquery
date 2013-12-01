@@ -147,4 +147,5 @@ function fetchLimitedData(data, tempJSON) {
 	return deferred.promise;
 }
 
+// makes object global
 exports.Pledges = Pledges;
