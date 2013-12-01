@@ -1,6 +1,7 @@
 var cheerio = require('cheerio'),
     q = require('q');
 
+// global obj
 var Links = function() {};
 
 Links.prototype.fetchLinksUsed = function(data, projectJSON) {
