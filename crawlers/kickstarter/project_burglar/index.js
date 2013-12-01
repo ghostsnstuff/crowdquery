@@ -52,7 +52,7 @@ function extractData(data) {
 	return deferred.promise;
 	
 }
-
+// print data
 function printJSON(data) {
 	console.log(data);
 }
