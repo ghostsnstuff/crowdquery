@@ -1,6 +1,7 @@
 var cheerio = require('cheerio'),
-		q = require('q');
+    q = require('q');
 
+// global obj
 var Media = function() {};
 
 // fetches array of media from description section of profile page
