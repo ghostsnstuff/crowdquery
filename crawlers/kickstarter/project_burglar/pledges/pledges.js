@@ -7,6 +7,7 @@
 var cheerio = require('cheerio'),
     q = require('q');
 
+// global obj
 var Pledges = function() {};
 
 Pledges.prototype.fetchPledges = function(data, projectJSON, totalBackers) {
