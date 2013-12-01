@@ -1,5 +1,6 @@
 var q = require('q');
 
+// global obj
 var Location = function() {};
 
 // fetches city, state, country
