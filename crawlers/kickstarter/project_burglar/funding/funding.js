@@ -30,4 +30,5 @@ Funding.prototype.fetchFunding = function(data, projectJSON) {
 	return deferred.promise;
 }
 
+// makes object global
 exports.Funding = Funding;
