@@ -5,7 +5,7 @@
 */
 
 var cheerio = require('cheerio'),
-		q = require('q');
+    q = require('q');
 
 var Pledges = function() {};
 
