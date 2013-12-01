@@ -2,9 +2,9 @@
 // returns promise with request.body 
 function fetchProject(url);
 
-// projectJSON used for all project data points
-// load data into cheerio object
-// make fxn calls that fetch different data sets 
+// projectJSON is a comprehensive json of all project-related data
+// cheerio module loads raw html data
+// call fxns that fetch different project data sets 
 // returns promise containing projectJSON
 function extractData(data);
 
