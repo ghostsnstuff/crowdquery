@@ -57,4 +57,5 @@ function printJSON(data) {
 	console.log(data);
 }
 
+// initiate exec
 fetchProject(proj_url).then(extractData).then(printJSON);
