@@ -28,4 +28,5 @@ Media.prototype.fetchMediaData = function(data, projectJSON) {
 	
 }
 
+// makes object global
 exports.Media = Media;
