@@ -24,4 +24,5 @@ Links.prototype.fetchLinksUsed = function(data, projectJSON) {
 
 }
 
+// makes object global
 exports.Links = Links;
