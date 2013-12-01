@@ -1,5 +1,6 @@
 var q = require('q');
 
+// global obj
 var Funding = function() {};
 
 // fetches backers, goal, $ raised, % raised, currency
