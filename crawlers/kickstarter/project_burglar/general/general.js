@@ -43,4 +43,5 @@ General.prototype.fetchGeneral = function(data, projectJSON) {
 
 }
 
+// makes object global
 exports.General = General;
