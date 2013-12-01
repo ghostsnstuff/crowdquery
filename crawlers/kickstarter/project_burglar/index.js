@@ -19,7 +19,7 @@ var request = require('request'),
 		Media = require('./media/media').Media,
 		media = new Media(),
 		Links = require('./links/links').Links,
-		links = new Links();
+		  links = new Links();
 
 // initiates request 
 function fetchProject(url) {
@@ -52,10 +52,9 @@ function extractData(data) {
 	return deferred.promise;
 	
 }
-// print data
+
 function printJSON(data) {
 	console.log(data);
 }
 
-// initiate exec
 fetchProject(proj_url).then(extractData).then(printJSON);
