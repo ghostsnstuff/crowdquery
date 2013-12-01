@@ -1,5 +1,6 @@
 var q = require('q');
 
+// global obj
 var Other = function() {};
 
 // fetches # updates and comments, website data, checks facebook-connected, checks first-time creator
