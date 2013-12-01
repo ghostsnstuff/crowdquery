@@ -29,7 +29,7 @@ Api.prototype.readJSON = function() {
 }
 
 Api.prototype.fetchJSON = function() {
-	var data = fs.readFileSync('/Users/jaredhalpert/crowdquery/crawlers/crunchbase/modules/query/query.json', 'utf-8');
+	var data = fs.readFileSync('/Users/jaredhalpert/crowdquery/crawlers/crunchbase/modules/api/api.json', 'utf-8');
 	data = data.toString();
 	data = JSON.parse(data);
 	return data;
