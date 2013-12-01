@@ -59,4 +59,5 @@ function fromTheUS(state) {
 	return isFromTheUS;
 }
 
+// makes object global
 exports.Location = Location;
