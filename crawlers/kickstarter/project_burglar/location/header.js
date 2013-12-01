@@ -1,9 +1,9 @@
 // locationJSON stores location data in projectJSON
-// get raw data and pass it to parseLocation() -> [city, state]
-// test if the state var is a US state
-// if it is append the appropriate data
-// if not its international, append the state as the country
-// append locationJSON to projectJSON
+// gets raw data and passes it to parseLocation() -> [city, state]
+// tests if the state var is a US state
+// if it is -> appends the appropriate data
+// if not -> its international, appends the state as the country
+// appends locationJSON to projectJSON
 // returns promise containing projectJSON
 function fetchLocation(data, projectJSON);
 
