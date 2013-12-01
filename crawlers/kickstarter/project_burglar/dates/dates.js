@@ -123,4 +123,5 @@ function splitDate(data) {
 	return result;
 }
 
+// makes object global
 exports.Dates = Dates;
