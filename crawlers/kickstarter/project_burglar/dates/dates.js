@@ -1,5 +1,6 @@
 var q = require('q');
 
+// global obj
 var Dates = function() {};
 
 // fetches # days, start date, and end date
