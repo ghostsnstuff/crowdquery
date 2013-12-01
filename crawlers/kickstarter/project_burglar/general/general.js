@@ -1,7 +1,7 @@
-var	q = require('q');
-
+var q = require('q');
 var base_url = 'http://www.kickstarter.com';
 
+// global obj
 var General = function() {};
 
 General.prototype.fetchGeneral = function(data, projectJSON) {
