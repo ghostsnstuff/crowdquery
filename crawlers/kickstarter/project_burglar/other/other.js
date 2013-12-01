@@ -95,4 +95,5 @@ function fbConnectTrue(data, otherJSON) {
 
 }
 
+// makes object global
 exports.Other = Other;
