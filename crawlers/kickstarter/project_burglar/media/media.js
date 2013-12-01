@@ -5,7 +5,7 @@ var cheerio = require('cheerio'),
 var Media = function() {};
 
 // fetches array of media from description section of profile page
-// append the files and # of items used to projectJSON
+// appends the files and # of items used to projectJSON
 Media.prototype.fetchMediaData = function(data, projectJSON) {
 	
 	var array = [];
@@ -19,9 +19,11 @@ Media.prototype.fetchMediaData = function(data, projectJSON) {
 	var numMedia = array.length;
 	mediaJSON.num_media = numMedia;
 	mediaJSON.media_files = array;
-
+	
+	// appends media property to comprehensive project json
 	projectJSON.media = mediaJSON;
-
+	
+	// promise
 	var deferred = q.defer();
 	deferred.resolve(projectJSON);
 	return deferred.promise;
