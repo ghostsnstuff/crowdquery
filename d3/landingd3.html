@@ -32,7 +32,7 @@
 		.circle {
 			stroke-width:1.5px;
 			stroke:#0099cc;
-			fill:none;
+			fill:#fff;
 			shape-rendering:cripsEdges;
 		}
 
@@ -102,24 +102,28 @@
 
 	var topAxis = svg.append("line").attr("class","horizontal graph").attr("x1",10)
 		.attr("x2",width-10).attr("y1",10).attr("y2",10);
-/*
-	var vertNodes = svg.selectAll(".circle").data(vertices.slice(1,vertices.length)).enter().append("circle")
-		.attr("cx",function(d){return d.x;}).attr("cy",function(d){return d.y;})
-		.attr("r",3).attr("class","circle").style("opacity",0.0001);
-*/
+
 	var newLines = svg.selectAll(".lines").data(vertices.slice(0,vertices.length-1)).enter().append("line").attr("class","line")
 		.attr("x1",function(d){return d.x+0;}).attr("y1",function(d){return d.y-0;})	
 		.attr("x2",function(d){return d.x+0.01;}).attr("y2",function(d){return d.y-0.01;})		
 		.style("stroke-width","0.01px").style("stroke","#0099cc");
 //		.attr("x2",function(d,i){return vertices[i+1].x-2;})
-//		.attr("y2",function(d,i){return vertices[i+1].y+2;})
+//		.attr("y2",function(d,i){return vertices[i+1].y+2;});
 
-	svg.transition().duration(1000).selectAll(".line").delay(function(d,i){return i * 750;})
+/* uncomment this block to have circle/nodes at each vertex 
+ 
+	var vertNodes = svg.selectAll(".circle").data(vertices.slice(1,vertices.length)).enter().append("circle")
+		.attr("cx",function(d){return d.x;}).attr("cy",function(d){return d.y;})
+		.attr("r",3).attr("class","circle").style("opacity",0.0001);
+
+	svg.transition().duration(10).selectAll(".circle").delay(function(d,i){return 1000 + i * 750;}).style("opacity",1);
+*/
+
+	svg.transition().duration(0900).selectAll(".line").delay(function(d,i){return i * 750;})
 		.style("stroke-width","2.0px")
 		.attr("x2",function(d,i){return vertices[i+1].x-0;})
 		.attr("y2",function(d,i){return vertices[i+1].y+0;});
 	
-//	svg.transition().duration(10).selectAll(".circle").delay(function(d,i){return 1000 + i * 750;}).style("opacity",1);
 
 </script>
 </body>
