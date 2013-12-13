@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href='http://fonts.googleapis.com/css?family=Oxygen:400,700' rel='stylesheet' type='text/css'>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="http://d3js.org/colorbrewer.v1.min.js"></script>
+	<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<style>
+		body {
+			font-family:"Helvetica neue", Helvetica, Arial, sans-serif;
+			margin:auto;
+		}
+		#line {
+			height:3px;
+			background-color:#afe061;
+		}
+		.circLegend{
+			fill:none;
+			stroke-width:2px;
+			stroke:#ddd;
+			stroke-dasharray:44;
+		}
+		.legend text{
+			font-size:11.5px
+		}
+		.axis path,
+		.axis line{
+			shape-rendering:crispEdges;
+			fill:none;
+			stroke:#000;
+		}
+		.x.axis path{
+			display:none;
+		}
+		.axis text{
+			font-size:11.5px;
+		}
+		label{
+			position:relative;
+			bottom:525px;
+			left:30px;
+		}
+		.d3-tip{
+			opacity:0.5;
+			font:12px sans-serif;
+			line-height:1;
+			padding:12px;
+			border-radius:2px;
+			background-color:#fff;
+			border-style:solid;
+			border-width:1px;
+			border-color:#ccc;
+		}
+		.d3-tip:after{
+			box-sizing:border-box;
+			display:inline;
+			font-size:10px;
+			width:100%;
+			line-height:1;
+			color:rgba(0,0,0,0.8);
+			content:"\25BC";
+			position:absolute;
+			text-align:center;
+		}
+		.d3-tip.n:after{
+			margin:-1px,0,0,0;
+			top:100%;
+			left:0;
+		}
+		.d3-tip h4 {
+			font: sans-serif;
+			border-bottom-style: solid;
+			margin: 0 auto;
+			border-bottom-width: 1px;
+		}
+		input {
+			border:none;
+			border-radius:5px;
+			padding:15px;
+			padding-left:21px;
+			padding-right:21px;
+			background-color:#ededed;
+			font-family: helvetica;
+			font-size:14px;
+			margin-left:-6px;
+			border:1px solid #ccc;
+		}
+		input:hover {
+			background-color:#ddd;
+		}
+		input:focus {
+			outline:0;
+		}
+		.button-all {
+			border-top-right-radius: 0px;
+			border-bottom-right-radius: 0px;
+		}
+		.button-categories {
+			border-radius:0px;
+		}
+		.button-growth {
+			border-top-left-radius: 0px;
+			border-bottom-left-radius: 0px;
+		}
+		#navigation {
+			border:0px solid black;
+			width:300px;
+			position:relative;
+			left:100px;
+			bottom:30px;
+		}
+		table {
+			font-size:14px;
+			position:relative;
+			top:10px;
+			left:140px;
+		}
+		td {
+			padding-bottom:10px;
+		}
+		.legend-square {
+			height:10px;
+			width:20px;
+		}
+		.legend-text {
+			padding-left:8px;
+		}
+		#legend-square-1 {
+			background-color: #afe061;
+		}
+		#legend-square-2 {
+			background-color: #96cdcd;
+		}
+		#legend-square-3 {
+			background-color: #bf5fff;
+		}
+		#legend-square-4 {
+			background-color: #c42222;
+		}
+		#html-component {
+			position:relative;
+			top:100px;
+		}
+
+		#thingy {
+			font-family: 'Oxygen', sans-serif;
+			font-weight:700;
+			font-size:32px;
+			position:relative;
+			left:42px;
+			color:#444;
+		}
+		#what-is-this {
+			position:relative;
+			left:140px;
+		}
+		#what-is-this p {
+			font-size: 21px;
+			font-family:helvetica;
+			font-weight:bold;
+			color:#333;
+		}
+		.info-button {
+			height:18px;
+			width:18px;
+			background-color:#afe061;
+			border-radius:100%;
+			border:0px solid #ccc;
+			color:#fff;
+			font-weight:bold;
+			text-align:center;
+			padding:1px;
+			padding-bottom:5px;
+			padding-left:3px;
+			padding-right:3px;
+			position:relative;
+			left:140px;
+			bottom:45px;
+			opacity: 0.85;
+		}
+		.info-button:hover {
+			opacity:1.0;
+			background-color:#a0d33c;
+			cursor:pointer;
+		}
+		#what-is-this-description {
+			width:200px;
+			position:relative;
+			margin-top:-30px;
+			font-size:13px;
+			font-weight:lighter;
+			left:0px;
+			top:5px;
+			line-height:18px;
+		}
+	</style>
+</head>
+<body>
+	<div id="line"></div>
+	<div id="html-component"> 
+		<div id="navigation">
+			<input value="All" type="button" class="button-all"/>
+			<input value="Categories" type="button" class="button-categories"/>
+			<input value="Growth" type="button" class="button-growth"/>
+		</div>
+		<!-- <p id="thingy">Hi</p> -->
+		<div id="what-is-this">
+			<p>what is this?</p>
+			<div class="info-button">+</div>
+			<p style="font-size:14px;font-weight:lighter;"id="what-is-this-description">
+				description goes here bla
+				description goes here bla
+				description goes here bla
+				description goes here bla
+				description goes here bla
+				description goes here bla
+				description goes here bla
+				description goes here bla
+				description goes here bla
+			</p>
+		</div>
+		<table>
+			<tr>
+				<td><div id="legend-square-1" class="legend-square"></div></td>
+				<td class="legend-text">Successfully Funded</td>
+			</tr>
+			<tr>
+				<td><div id="legend-square-2" class="legend-square"></div></td>
+				<td class="legend-text">21% - 99% Funded</td>
+			</tr>
+			<tr>
+				<td><div id="legend-square-3" class="legend-square"></div></td>
+				<td class="legend-text">1% - 20% Funded</td>
+			</tr>
+			<tr>
+				<td><div id="legend-square-4" class="legend-square"></div></td>
+				<td class="legend-text">0% Funded</td>
+			</tr>
+		</table>
+	</div>
+<script>
+
+	// JQUERY
+	// expose-hide what-is-this description
+	$(".info-button").on("click", function() {
+		$("#what-is-this").fadeIn(400);
+	});
+
+
+	// json
+
+	var da = {"ta" : [
+
+{"category":"Games","LaunchedProjects":"7561","TotalDollars":"$191.88 M","SuccessfulDollars":"$167.64 M","UnsuccessfulDollars":"$17.21 M","LiveDollars":"$7.03 M","LiveProjects":"428","SuccessRate":"34.98%","Successfully Funded Projects":"2495","Less than $1,000 Raised":"133","$1,000 to $9,999 Raised":"976","$10,000 to $19,999 Raised":"475","$20,000 to $99,999 Raised":"671","$100 K to $999,999 Raised":"213","$1 M Raised":"27","Unsuccessfully Funded Projects":"4638","0%Funded":"319","1% to 20% Funded":"3320","21% to 40% Funded":"559","41% to 60% Funded":"275","61% to 80% Funded":"103","81% to 99% Funded":"62"},
+{"category":"Film & Video","LaunchedProjects":"31019","TotalDollars":"$179.34 M","SuccessfulDollars":"$148.36 M","UnsuccessfulDollars":"$27.64 M","LiveDollars":"$3.34 M","LiveProjects":"828","SuccessRate":"39.79%","Successfully Funded Projects":"12013","Less than $1,000 Raised":"1151","$1,000 to $9,999 Raised":"7296","$10,000 to $19,999 Raised":"1884","$20,000 to $99,999 Raised":"1544","$100 K to $999,999 Raised":"135","$1 M Raised":"3","Unsuccessfully Funded Projects":"18178","0%Funded":"3698","1% to 20% Funded":"11629","21% to 40% Funded":"1933","41% to 60% Funded":"631","61% to 80% Funded":"203","81% to 99% Funded":"84"},
+{"category":"Design","LaunchedProjects":"5831","TotalDollars":"$121.98 M","SuccessfulDollars":"$104.76 M","UnsuccessfulDollars":"$12.21 M","LiveDollars":"$5.01 M","LiveProjects":"375","SuccessRate":"38.75%","Successfully Funded Projects":"2114","Less than $1,000 Raised":"136","$1,000 to $9,999 Raised":"738","$10,000 to $19,999 Raised":"391","$20,000 to $99,999 Raised":"626","$100 K to $999,999 Raised":"216","$1 M Raised":"7","Unsuccessfully Funded Projects":"3342","0%Funded":"202","1% to 20% Funded":"2219","21% to 40% Funded":"549","41% to 60% Funded":"250","61% to 80% Funded":"75","81% to 99% Funded":"47"},
+{"category":"Music","LaunchedProjects":"25850","TotalDollars":"$95.25 M","SuccessfulDollars":"$85.65 M","UnsuccessfulDollars":"$7.90 M","LiveDollars":"$1.70 M","LiveProjects":"711","SuccessRate":"55.13%","Successfully Funded Projects":"13859","Less than $1,000 Raised":"1366","$1,000 to $9,999 Raised":"10293","$10,000 to $19,999 Raised":"1589","$20,000 to $99,999 Raised":"584","$100 K to $999,999 Raised":"26","$1 M Raised":"1","Unsuccessfully Funded Projects":"11280","0%Funded":"2558","1% to 20% Funded":"6460","21% to 40% Funded":"1520","41% to 60% Funded":"535","61% to 80% Funded":"156","81% to 99% Funded":"51"},
+{"category":"Technology","LaunchedProjects":"3211","TotalDollars":"$95.49 M","SuccessfulDollars":"$79.07 M","UnsuccessfulDollars":"$10.45 M","LiveDollars":"$5.97 M","LiveProjects":"213","SuccessRate":"34.59%","Successfully Funded Projects":"1037","Less than $1,000 Raised":"46","$1,000 to $9,999 Raised":"347","$10,000 to $19,999 Raised":"147","$20,000 to $99,999 Raised":"299","$100 K to $999,999 Raised":"188","$1 M Raised":"10","Unsuccessfully Funded Projects":"1961","0%Funded":"163","1% to 20% Funded":"1381","21% to 40% Funded":"247","41% to 60% Funded":"102","61% to 80% Funded":"40","81% to 99% Funded":"28"},
+{"category":"Publishing","LaunchedProjects":"14704","TotalDollars":"$42.12 M","SuccessfulDollars":"$34.31 M","UnsuccessfulDollars":"$6.04 M","LiveDollars":"$1.77 M","LiveProjects":"602","SuccessRate":"32.51%","Successfully Funded Projects":"4585","Less than $1,000 Raised":"718","$1,000 to $9,999 Raised":"3009","$10,000 to $19,999 Raised":"529","$20,000 to $99,999 Raised":"309","$100 K to $999,999 Raised":"20","$1 M Raised":"0","Unsuccessfully Funded Projects":"9517","0%Funded":"2112","1% to 20% Funded":"5988","21% to 40% Funded":"928","41% to 60% Funded":"355","61% to 80% Funded":"95","81% to 99% Funded":"39"},
+{"category":"Art","LaunchedProjects":"10943","TotalDollars":"$31.31 M","SuccessfulDollars":"$26.88 M","UnsuccessfulDollars":"$3.89 M","LiveDollars":"$539.02 K","LiveProjects":"345","SuccessRate":"48.85%","Successfully Funded Projects":"5177","Less than $1,000 Raised":"976","$1,000 to $9,999 Raised":"3591","$10,000 to $19,999 Raised":"418","$20,000 to $99,999 Raised":"182","$100 K to $999,999 Raised":"10","$1 M Raised":"0","Unsuccessfully Funded Projects":"5421","0%Funded":"996","1% to 20% Funded":"3301","21% to 40% Funded":"724","41% to 60% Funded":"276","61% to 80% Funded":"84","81% to 99% Funded":"40"},
+{"category":"Food","LaunchedProjects":"4747","TotalDollars":"$32.36 M","SuccessfulDollars":"$26.50 M","UnsuccessfulDollars":"$5.05 M","LiveDollars":"$808.22 K","LiveProjects":"214","SuccessRate":"40.79%","Successfully Funded Projects":"1849","Less than $1,000 Raised":"84","$1,000 to $9,999 Raised":"926","$10,000 to $19,999 Raised":"475","$20,000 to $99,999 Raised":"345","$100 K to $999,999 Raised":"19","$1 M Raised":"0","Unsuccessfully Funded Projects":"2684","0%Funded":"168","1% to 20% Funded":"1943","21% to 40% Funded":"360","41% to 60% Funded":"147","61% to 80% Funded":"51","81% to 99% Funded":"15"},
+{"category":"Comics","LaunchedProjects":"3345","TotalDollars":"$23.05 M","SuccessfulDollars":"$20.70 M","UnsuccessfulDollars":"$1.72 M","LiveDollars":"$636.31 K","LiveProjects":"142","SuccessRate":"49.02%","Successfully Funded Projects":"1570","Less than $1,000 Raised":"203","$1,000 to $9,999 Raised":"950","$10,000 to $19,999 Raised":"222","$20,000 to $99,999 Raised":"168","$100 K to $999,999 Raised":"26","$1 M Raised":"1","Unsuccessfully Funded Projects":"1633","0%Funded":"172","1% to 20% Funded":"1054","21% to 40% Funded":"259","41% to 60% Funded":"99","61% to 80% Funded":"36","81% to 99% Funded":"13"},
+{"category":"Fashion","LaunchedProjects":"4581","TotalDollars":"$24.10 M","SuccessfulDollars":"$19.68 M","UnsuccessfulDollars":"$3.06 M","LiveDollars":"$1.37 M","LiveProjects":"250","SuccessRate":"29.02%","Successfully Funded Projects":"1257","Less than $1,000 Raised":"131","$1,000 to $9,999 Raised":"716","$10,000 to $19,999 Raised":"197","$20,000 to $99,999 Raised":"184","$100 K to $999,999 Raised":"28","$1 M Raised":"1","Unsuccessfully Funded Projects":"3074","0%Funded":"571","1% to 20% Funded":"1930","21% to 40% Funded":"403","41% to 60% Funded":"93","61% to 80% Funded":"53","81% to 99% Funded":"24"},
+{"category":"Theater","LaunchedProjects":"5319","TotalDollars":"$20.60 M","SuccessfulDollars":"$18.07 M","UnsuccessfulDollars":"$2.21 M","LiveDollars":"$323.33 K","LiveProjects":"97","SuccessRate":"64.42%","Successfully Funded Projects":"3364","Less than $1,000 Raised":"453","$1,000 to $9,999 Raised":"2534","$10,000 to $19,999 Raised":"246","$20,000 to $99,999 Raised":"125","$100 K to $999,999 Raised":"6","$1 M Raised":"0","Unsuccessfully Funded Projects":"1858","0%Funded":"340","1% to 20% Funded":"1118","21% to 40% Funded":"257","41% to 60% Funded":"100","61% to 80% Funded":"29","81% to 99% Funded":"14"},
+{"category":"Photography","LaunchedProjects":"3776","TotalDollars":"$11.68 M","SuccessfulDollars":"$9.80 M","UnsuccessfulDollars":"$1.64 M","LiveDollars":"$239.48 K","LiveProjects":"108","SuccessRate":"36.61%","Successfully Funded Projects":"1343","Less than $1,000 Raised":"210","$1,000 to $9,999 Raised":"885","$10,000 to $19,999 Raised":"169","$20,000 to $99,999 Raised":"78","$100 K to $999,999 Raised":"0","$1 M Raised":"1","Unsuccessfully Funded Projects":"2325","0%Funded":"464","1% to 20% Funded":"1405","21% to 40% Funded":"308","41% to 60% Funded":"96","61% to 80% Funded":"41","81% to 99% Funded":"11"},
+{"category":"Dance","LaunchedProjects":"1606","TotalDollars":"$5.21 M","SuccessfulDollars":"$4.77 M","UnsuccessfulDollars":"$335.80 K","LiveDollars":"$110.18 K","LiveProjects":"47","SuccessRate":"71.20%","Successfully Funded Projects":"1110","Less than $1,000 Raised":"92","$1,000 to $9,999 Raised":"929","$10,000 to $19,999 Raised":"69","$20,000 to $99,999 Raised":"20","$100 K to $999,999 Raised":"0","$1 M Raised":"0","Unsuccessfully Funded Projects":"449","0%Funded":"75","1% to 20% Funded":"262","21% to 40% Funded":"65","41% to 60% Funded":"35","61% to 80% Funded":"9","81% to 99% Funded":"3"},
+{"category":"Games","LaunchedProjects":"7561","TotalDollars":"$191.88 M","SuccessfulDollars":"$167.64 M","UnsuccessfulDollars":"$17.21 M","LiveDollars":"$7.03 M","LiveProjects":"428","SuccessRate":"34.98%","Successfully Funded Projects":"2495","Less than $1,000 Raised":"133","$1,000 to $9,999 Raised":"976","$10,000 to $19,999 Raised":"475","$20,000 to $99,999 Raised":"671","$100 K to $999,999 Raised":"213","$1 M Raised":"27","Unsuccessfully Funded Projects":"4638","0%Funded":"319","1% to 20% Funded":"3320","21% to 40% Funded":"559","41% to 60% Funded":"275","61% to 80% Funded":"103","81% to 99% Funded":"62"},
+{"category":"Film & Video","LaunchedProjects":"31019","TotalDollars":"$179.34 M","SuccessfulDollars":"$148.36 M","UnsuccessfulDollars":"$27.64 M","LiveDollars":"$3.34 M","LiveProjects":"828","SuccessRate":"39.79%","Successfully Funded Projects":"12013","Less than $1,000 Raised":"1151","$1,000 to $9,999 Raised":"7296","$10,000 to $19,999 Raised":"1884","$20,000 to $99,999 Raised":"1544","$100 K to $999,999 Raised":"135","$1 M Raised":"3","Unsuccessfully Funded Projects":"18178","0%Funded":"3698","1% to 20% Funded":"11629","21% to 40% Funded":"1933","41% to 60% Funded":"631","61% to 80% Funded":"203","81% to 99% Funded":"84"},
+{"category":"Design","LaunchedProjects":"5831","TotalDollars":"$121.98 M","SuccessfulDollars":"$104.76 M","UnsuccessfulDollars":"$12.21 M","LiveDollars":"$5.01 M","LiveProjects":"375","SuccessRate":"38.75%","Successfully Funded Projects":"2114","Less than $1,000 Raised":"136","$1,000 to $9,999 Raised":"738","$10,000 to $19,999 Raised":"391","$20,000 to $99,999 Raised":"626","$100 K to $999,999 Raised":"216","$1 M Raised":"7","Unsuccessfully Funded Projects":"3342","0%Funded":"202","1% to 20% Funded":"2219","21% to 40% Funded":"549","41% to 60% Funded":"250","61% to 80% Funded":"75","81% to 99% Funded":"47"},
+{"category":"Music","LaunchedProjects":"25850","TotalDollars":"$95.25 M","SuccessfulDollars":"$85.65 M","UnsuccessfulDollars":"$7.90 M","LiveDollars":"$1.70 M","LiveProjects":"711","SuccessRate":"55.13%","Successfully Funded Projects":"13859","Less than $1,000 Raised":"1366","$1,000 to $9,999 Raised":"10293","$10,000 to $19,999 Raised":"1589","$20,000 to $99,999 Raised":"584","$100 K to $999,999 Raised":"26","$1 M Raised":"1","Unsuccessfully Funded Projects":"11280","0%Funded":"2558","1% to 20% Funded":"6460","21% to 40% Funded":"1520","41% to 60% Funded":"535","61% to 80% Funded":"156","81% to 99% Funded":"51"},
+{"category":"Technology","LaunchedProjects":"3211","TotalDollars":"$95.49 M","SuccessfulDollars":"$79.07 M","UnsuccessfulDollars":"$10.45 M","LiveDollars":"$5.97 M","LiveProjects":"213","SuccessRate":"34.59%","Successfully Funded Projects":"1037","Less than $1,000 Raised":"46","$1,000 to $9,999 Raised":"347","$10,000 to $19,999 Raised":"147","$20,000 to $99,999 Raised":"299","$100 K to $999,999 Raised":"188","$1 M Raised":"10","Unsuccessfully Funded Projects":"1961","0%Funded":"163","1% to 20% Funded":"1381","21% to 40% Funded":"247","41% to 60% Funded":"102","61% to 80% Funded":"40","81% to 99% Funded":"28"},
+{"category":"Publishing","LaunchedProjects":"14704","TotalDollars":"$42.12 M","SuccessfulDollars":"$34.31 M","UnsuccessfulDollars":"$6.04 M","LiveDollars":"$1.77 M","LiveProjects":"602","SuccessRate":"32.51%","Successfully Funded Projects":"4585","Less than $1,000 Raised":"718","$1,000 to $9,999 Raised":"3009","$10,000 to $19,999 Raised":"529","$20,000 to $99,999 Raised":"309","$100 K to $999,999 Raised":"20","$1 M Raised":"0","Unsuccessfully Funded Projects":"9517","0%Funded":"2112","1% to 20% Funded":"5988","21% to 40% Funded":"928","41% to 60% Funded":"355","61% to 80% Funded":"95","81% to 99% Funded":"39"},
+{"category":"Art","LaunchedProjects":"10943","TotalDollars":"$31.31 M","SuccessfulDollars":"$26.88 M","UnsuccessfulDollars":"$3.89 M","LiveDollars":"$539.02 K","LiveProjects":"345","SuccessRate":"48.85%","Successfully Funded Projects":"5177","Less than $1,000 Raised":"976","$1,000 to $9,999 Raised":"3591","$10,000 to $19,999 Raised":"418","$20,000 to $99,999 Raised":"182","$100 K to $999,999 Raised":"10","$1 M Raised":"0","Unsuccessfully Funded Projects":"5421","0%Funded":"996","1% to 20% Funded":"3301","21% to 40% Funded":"724","41% to 60% Funded":"276","61% to 80% Funded":"84","81% to 99% Funded":"40"},
+{"category":"Food","LaunchedProjects":"4747","TotalDollars":"$32.36 M","SuccessfulDollars":"$26.50 M","UnsuccessfulDollars":"$5.05 M","LiveDollars":"$808.22 K","LiveProjects":"214","SuccessRate":"40.79%","Successfully Funded Projects":"1849","Less than $1,000 Raised":"84","$1,000 to $9,999 Raised":"926","$10,000 to $19,999 Raised":"475","$20,000 to $99,999 Raised":"345","$100 K to $999,999 Raised":"19","$1 M Raised":"0","Unsuccessfully Funded Projects":"2684","0%Funded":"168","1% to 20% Funded":"1943","21% to 40% Funded":"360","41% to 60% Funded":"147","61% to 80% Funded":"51","81% to 99% Funded":"15"},
+{"category":"Comics","LaunchedProjects":"3345","TotalDollars":"$23.05 M","SuccessfulDollars":"$20.70 M","UnsuccessfulDollars":"$1.72 M","LiveDollars":"$636.31 K","LiveProjects":"142","SuccessRate":"49.02%","Successfully Funded Projects":"1570","Less than $1,000 Raised":"203","$1,000 to $9,999 Raised":"950","$10,000 to $19,999 Raised":"222","$20,000 to $99,999 Raised":"168","$100 K to $999,999 Raised":"26","$1 M Raised":"1","Unsuccessfully Funded Projects":"1633","0%Funded":"172","1% to 20% Funded":"1054","21% to 40% Funded":"259","41% to 60% Funded":"99","61% to 80% Funded":"36","81% to 99% Funded":"13"},
+{"category":"Fashion","LaunchedProjects":"4581","TotalDollars":"$24.10 M","SuccessfulDollars":"$19.68 M","UnsuccessfulDollars":"$3.06 M","LiveDollars":"$1.37 M","LiveProjects":"250","SuccessRate":"29.02%","Successfully Funded Projects":"1257","Less than $1,000 Raised":"131","$1,000 to $9,999 Raised":"716","$10,000 to $19,999 Raised":"197","$20,000 to $99,999 Raised":"184","$100 K to $999,999 Raised":"28","$1 M Raised":"1","Unsuccessfully Funded Projects":"3074","0%Funded":"571","1% to 20% Funded":"1930","21% to 40% Funded":"403","41% to 60% Funded":"93","61% to 80% Funded":"53","81% to 99% Funded":"24"},
+{"category":"Theater","LaunchedProjects":"5319","TotalDollars":"$20.60 M","SuccessfulDollars":"$18.07 M","UnsuccessfulDollars":"$2.21 M","LiveDollars":"$323.33 K","LiveProjects":"97","SuccessRate":"64.42%","Successfully Funded Projects":"3364","Less than $1,000 Raised":"453","$1,000 to $9,999 Raised":"2534","$10,000 to $19,999 Raised":"246","$20,000 to $99,999 Raised":"125","$100 K to $999,999 Raised":"6","$1 M Raised":"0","Unsuccessfully Funded Projects":"1858","0%Funded":"340","1% to 20% Funded":"1118","21% to 40% Funded":"257","41% to 60% Funded":"100","61% to 80% Funded":"29","81% to 99% Funded":"14"},
+{"category":"Photography","LaunchedProjects":"3776","TotalDollars":"$11.68 M","SuccessfulDollars":"$9.80 M","UnsuccessfulDollars":"$1.64 M","LiveDollars":"$239.48 K","LiveProjects":"108","SuccessRate":"36.61%","Successfully Funded Projects":"1343","Less than $1,000 Raised":"210","$1,000 to $9,999 Raised":"885","$10,000 to $19,999 Raised":"169","$20,000 to $99,999 Raised":"78","$100 K to $999,999 Raised":"0","$1 M Raised":"1","Unsuccessfully Funded Projects":"2325","0%Funded":"464","1% to 20% Funded":"1405","21% to 40% Funded":"308","41% to 60% Funded":"96","61% to 80% Funded":"41","81% to 99% Funded":"11"},
+{"category":"Dance","LaunchedProjects":"1606","TotalDollars":"$5.21 M","SuccessfulDollars":"$4.77 M","UnsuccessfulDollars":"$335.80 K","LiveDollars":"$110.18 K","LiveProjects":"47","SuccessRate":"71.20%","Successfully Funded Projects":"1110","Less than $1,000 Raised":"92","$1,000 to $9,999 Raised":"929","$10,000 to $19,999 Raised":"69","$20,000 to $99,999 Raised":"20","$100 K to $999,999 Raised":"0","$1 M Raised":"0","Unsuccessfully Funded Projects":"449","0%Funded":"75","1% to 20% Funded":"262","21% to 40% Funded":"65","41% to 60% Funded":"35","61% to 80% Funded":"9","81% to 99% Funded":"3"},
+{"category":"Games","LaunchedProjects":"7561","TotalDollars":"$191.88 M","SuccessfulDollars":"$167.64 M","UnsuccessfulDollars":"$17.21 M","LiveDollars":"$7.03 M","LiveProjects":"428","SuccessRate":"34.98%","Successfully Funded Projects":"2495","Less than $1,000 Raised":"133","$1,000 to $9,999 Raised":"976","$10,000 to $19,999 Raised":"475","$20,000 to $99,999 Raised":"671","$100 K to $999,999 Raised":"213","$1 M Raised":"27","Unsuccessfully Funded Projects":"4638","0%Funded":"319","1% to 20% Funded":"3320","21% to 40% Funded":"559","41% to 60% Funded":"275","61% to 80% Funded":"103","81% to 99% Funded":"62"},
+{"category":"Film & Video","LaunchedProjects":"31019","TotalDollars":"$179.34 M","SuccessfulDollars":"$148.36 M","UnsuccessfulDollars":"$27.64 M","LiveDollars":"$3.34 M","LiveProjects":"828","SuccessRate":"39.79%","Successfully Funded Projects":"12013","Less than $1,000 Raised":"1151","$1,000 to $9,999 Raised":"7296","$10,000 to $19,999 Raised":"1884","$20,000 to $99,999 Raised":"1544","$100 K to $999,999 Raised":"135","$1 M Raised":"3","Unsuccessfully Funded Projects":"18178","0%Funded":"3698","1% to 20% Funded":"11629","21% to 40% Funded":"1933","41% to 60% Funded":"631","61% to 80% Funded":"203","81% to 99% Funded":"84"},
+{"category":"Design","LaunchedProjects":"5831","TotalDollars":"$121.98 M","SuccessfulDollars":"$104.76 M","UnsuccessfulDollars":"$12.21 M","LiveDollars":"$5.01 M","LiveProjects":"375","SuccessRate":"38.75%","Successfully Funded Projects":"2114","Less than $1,000 Raised":"136","$1,000 to $9,999 Raised":"738","$10,000 to $19,999 Raised":"391","$20,000 to $99,999 Raised":"626","$100 K to $999,999 Raised":"216","$1 M Raised":"7","Unsuccessfully Funded Projects":"3342","0%Funded":"202","1% to 20% Funded":"2219","21% to 40% Funded":"549","41% to 60% Funded":"250","61% to 80% Funded":"75","81% to 99% Funded":"47"},
+{"category":"Music","LaunchedProjects":"25850","TotalDollars":"$95.25 M","SuccessfulDollars":"$85.65 M","UnsuccessfulDollars":"$7.90 M","LiveDollars":"$1.70 M","LiveProjects":"711","SuccessRate":"55.13%","Successfully Funded Projects":"13859","Less than $1,000 Raised":"1366","$1,000 to $9,999 Raised":"10293","$10,000 to $19,999 Raised":"1589","$20,000 to $99,999 Raised":"584","$100 K to $999,999 Raised":"26","$1 M Raised":"1","Unsuccessfully Funded Projects":"11280","0%Funded":"2558","1% to 20% Funded":"6460","21% to 40% Funded":"1520","41% to 60% Funded":"535","61% to 80% Funded":"156","81% to 99% Funded":"51"},
+{"category":"Technology","LaunchedProjects":"3211","TotalDollars":"$95.49 M","SuccessfulDollars":"$79.07 M","UnsuccessfulDollars":"$10.45 M","LiveDollars":"$5.97 M","LiveProjects":"213","SuccessRate":"34.59%","Successfully Funded Projects":"1037","Less than $1,000 Raised":"46","$1,000 to $9,999 Raised":"347","$10,000 to $19,999 Raised":"147","$20,000 to $99,999 Raised":"299","$100 K to $999,999 Raised":"188","$1 M Raised":"10","Unsuccessfully Funded Projects":"1961","0%Funded":"163","1% to 20% Funded":"1381","21% to 40% Funded":"247","41% to 60% Funded":"102","61% to 80% Funded":"40","81% to 99% Funded":"28"},
+{"category":"Publishing","LaunchedProjects":"14704","TotalDollars":"$42.12 M","SuccessfulDollars":"$34.31 M","UnsuccessfulDollars":"$6.04 M","LiveDollars":"$1.77 M","LiveProjects":"602","SuccessRate":"32.51%","Successfully Funded Projects":"4585","Less than $1,000 Raised":"718","$1,000 to $9,999 Raised":"3009","$10,000 to $19,999 Raised":"529","$20,000 to $99,999 Raised":"309","$100 K to $999,999 Raised":"20","$1 M Raised":"0","Unsuccessfully Funded Projects":"9517","0%Funded":"2112","1% to 20% Funded":"5988","21% to 40% Funded":"928","41% to 60% Funded":"355","61% to 80% Funded":"95","81% to 99% Funded":"39"},
+{"category":"Art","LaunchedProjects":"10943","TotalDollars":"$31.31 M","SuccessfulDollars":"$26.88 M","UnsuccessfulDollars":"$3.89 M","LiveDollars":"$539.02 K","LiveProjects":"345","SuccessRate":"48.85%","Successfully Funded Projects":"5177","Less than $1,000 Raised":"976","$1,000 to $9,999 Raised":"3591","$10,000 to $19,999 Raised":"418","$20,000 to $99,999 Raised":"182","$100 K to $999,999 Raised":"10","$1 M Raised":"0","Unsuccessfully Funded Projects":"5421","0%Funded":"996","1% to 20% Funded":"3301","21% to 40% Funded":"724","41% to 60% Funded":"276","61% to 80% Funded":"84","81% to 99% Funded":"40"},
+{"category":"Food","LaunchedProjects":"4747","TotalDollars":"$32.36 M","SuccessfulDollars":"$26.50 M","UnsuccessfulDollars":"$5.05 M","LiveDollars":"$808.22 K","LiveProjects":"214","SuccessRate":"40.79%","Successfully Funded Projects":"1849","Less than $1,000 Raised":"84","$1,000 to $9,999 Raised":"926","$10,000 to $19,999 Raised":"475","$20,000 to $99,999 Raised":"345","$100 K to $999,999 Raised":"19","$1 M Raised":"0","Unsuccessfully Funded Projects":"2684","0%Funded":"168","1% to 20% Funded":"1943","21% to 40% Funded":"360","41% to 60% Funded":"147","61% to 80% Funded":"51","81% to 99% Funded":"15"},
+{"category":"Comics","LaunchedProjects":"3345","TotalDollars":"$23.05 M","SuccessfulDollars":"$20.70 M","UnsuccessfulDollars":"$1.72 M","LiveDollars":"$636.31 K","LiveProjects":"142","SuccessRate":"49.02%","Successfully Funded Projects":"1570","Less than $1,000 Raised":"203","$1,000 to $9,999 Raised":"950","$10,000 to $19,999 Raised":"222","$20,000 to $99,999 Raised":"168","$100 K to $999,999 Raised":"26","$1 M Raised":"1","Unsuccessfully Funded Projects":"1633","0%Funded":"172","1% to 20% Funded":"1054","21% to 40% Funded":"259","41% to 60% Funded":"99","61% to 80% Funded":"36","81% to 99% Funded":"13"},
+{"category":"Fashion","LaunchedProjects":"4581","TotalDollars":"$24.10 M","SuccessfulDollars":"$19.68 M","UnsuccessfulDollars":"$3.06 M","LiveDollars":"$1.37 M","LiveProjects":"250","SuccessRate":"29.02%","Successfully Funded Projects":"1257","Less than $1,000 Raised":"131","$1,000 to $9,999 Raised":"716","$10,000 to $19,999 Raised":"197","$20,000 to $99,999 Raised":"184","$100 K to $999,999 Raised":"28","$1 M Raised":"1","Unsuccessfully Funded Projects":"3074","0%Funded":"571","1% to 20% Funded":"1930","21% to 40% Funded":"403","41% to 60% Funded":"93","61% to 80% Funded":"53","81% to 99% Funded":"24"},
+{"category":"Theater","LaunchedProjects":"5319","TotalDollars":"$20.60 M","SuccessfulDollars":"$18.07 M","UnsuccessfulDollars":"$2.21 M","LiveDollars":"$323.33 K","LiveProjects":"97","SuccessRate":"64.42%","Successfully Funded Projects":"3364","Less than $1,000 Raised":"453","$1,000 to $9,999 Raised":"2534","$10,000 to $19,999 Raised":"246","$20,000 to $99,999 Raised":"125","$100 K to $999,999 Raised":"6","$1 M Raised":"0","Unsuccessfully Funded Projects":"1858","0%Funded":"340","1% to 20% Funded":"1118","21% to 40% Funded":"257","41% to 60% Funded":"100","61% to 80% Funded":"29","81% to 99% Funded":"14"},
+{"category":"Photography","LaunchedProjects":"3776","TotalDollars":"$11.68 M","SuccessfulDollars":"$9.80 M","UnsuccessfulDollars":"$1.64 M","LiveDollars":"$239.48 K","LiveProjects":"108","SuccessRate":"36.61%","Successfully Funded Projects":"1343","Less than $1,000 Raised":"210","$1,000 to $9,999 Raised":"885","$10,000 to $19,999 Raised":"169","$20,000 to $99,999 Raised":"78","$100 K to $999,999 Raised":"0","$1 M Raised":"1","Unsuccessfully Funded Projects":"2325","0%Funded":"464","1% to 20% Funded":"1405","21% to 40% Funded":"308","41% to 60% Funded":"96","61% to 80% Funded":"41","81% to 99% Funded":"11"},
+{"category":"Dance","LaunchedProjects":"1606","TotalDollars":"$5.21 M","SuccessfulDollars":"$4.77 M","UnsuccessfulDollars":"$335.80 K","LiveDollars":"$110.18 K","LiveProjects":"47","SuccessRate":"71.20%","Successfully Funded Projects":"1110","Less than $1,000 Raised":"92","$1,000 to $9,999 Raised":"929","$10,000 to $19,999 Raised":"69","$20,000 to $99,999 Raised":"20","$100 K to $999,999 Raised":"0","$1 M Raised":"0","Unsuccessfully Funded Projects":"449","0%Funded":"75","1% to 20% Funded":"262","21% to 40% Funded":"65","41% to 60% Funded":"35","61% to 80% Funded":"9","81% to 99% Funded":"3"},
+{"category":"Games","LaunchedProjects":"7561","TotalDollars":"$191.88 M","SuccessfulDollars":"$167.64 M","UnsuccessfulDollars":"$17.21 M","LiveDollars":"$7.03 M","LiveProjects":"428","SuccessRate":"34.98%","Successfully Funded Projects":"2495","Less than $1,000 Raised":"133","$1,000 to $9,999 Raised":"976","$10,000 to $19,999 Raised":"475","$20,000 to $99,999 Raised":"671","$100 K to $999,999 Raised":"213","$1 M Raised":"27","Unsuccessfully Funded Projects":"4638","0%Funded":"319","1% to 20% Funded":"3320","21% to 40% Funded":"559","41% to 60% Funded":"275","61% to 80% Funded":"103","81% to 99% Funded":"62"},
+{"category":"Film & Video","LaunchedProjects":"31019","TotalDollars":"$179.34 M","SuccessfulDollars":"$148.36 M","UnsuccessfulDollars":"$27.64 M","LiveDollars":"$3.34 M","LiveProjects":"828","SuccessRate":"39.79%","Successfully Funded Projects":"12013","Less than $1,000 Raised":"1151","$1,000 to $9,999 Raised":"7296","$10,000 to $19,999 Raised":"1884","$20,000 to $99,999 Raised":"1544","$100 K to $999,999 Raised":"135","$1 M Raised":"3","Unsuccessfully Funded Projects":"18178","0%Funded":"3698","1% to 20% Funded":"11629","21% to 40% Funded":"1933","41% to 60% Funded":"631","61% to 80% Funded":"203","81% to 99% Funded":"84"},
+{"category":"Design","LaunchedProjects":"5831","TotalDollars":"$121.98 M","SuccessfulDollars":"$104.76 M","UnsuccessfulDollars":"$12.21 M","LiveDollars":"$5.01 M","LiveProjects":"375","SuccessRate":"38.75%","Successfully Funded Projects":"2114","Less than $1,000 Raised":"136","$1,000 to $9,999 Raised":"738","$10,000 to $19,999 Raised":"391","$20,000 to $99,999 Raised":"626","$100 K to $999,999 Raised":"216","$1 M Raised":"7","Unsuccessfully Funded Projects":"3342","0%Funded":"202","1% to 20% Funded":"2219","21% to 40% Funded":"549","41% to 60% Funded":"250","61% to 80% Funded":"75","81% to 99% Funded":"47"},
+{"category":"Music","LaunchedProjects":"25850","TotalDollars":"$95.25 M","SuccessfulDollars":"$85.65 M","UnsuccessfulDollars":"$7.90 M","LiveDollars":"$1.70 M","LiveProjects":"711","SuccessRate":"55.13%","Successfully Funded Projects":"13859","Less than $1,000 Raised":"1366","$1,000 to $9,999 Raised":"10293","$10,000 to $19,999 Raised":"1589","$20,000 to $99,999 Raised":"584","$100 K to $999,999 Raised":"26","$1 M Raised":"1","Unsuccessfully Funded Projects":"11280","0%Funded":"2558","1% to 20% Funded":"6460","21% to 40% Funded":"1520","41% to 60% Funded":"535","61% to 80% Funded":"156","81% to 99% Funded":"51"},
+{"category":"Technology","LaunchedProjects":"3211","TotalDollars":"$95.49 M","SuccessfulDollars":"$79.07 M","UnsuccessfulDollars":"$10.45 M","LiveDollars":"$5.97 M","LiveProjects":"213","SuccessRate":"34.59%","Successfully Funded Projects":"1037","Less than $1,000 Raised":"46","$1,000 to $9,999 Raised":"347","$10,000 to $19,999 Raised":"147","$20,000 to $99,999 Raised":"299","$100 K to $999,999 Raised":"188","$1 M Raised":"10","Unsuccessfully Funded Projects":"1961","0%Funded":"163","1% to 20% Funded":"1381","21% to 40% Funded":"247","41% to 60% Funded":"102","61% to 80% Funded":"40","81% to 99% Funded":"28"},
+{"category":"Publishing","LaunchedProjects":"14704","TotalDollars":"$42.12 M","SuccessfulDollars":"$34.31 M","UnsuccessfulDollars":"$6.04 M","LiveDollars":"$1.77 M","LiveProjects":"602","SuccessRate":"32.51%","Successfully Funded Projects":"4585","Less than $1,000 Raised":"718","$1,000 to $9,999 Raised":"3009","$10,000 to $19,999 Raised":"529","$20,000 to $99,999 Raised":"309","$100 K to $999,999 Raised":"20","$1 M Raised":"0","Unsuccessfully Funded Projects":"9517","0%Funded":"2112","1% to 20% Funded":"5988","21% to 40% Funded":"928","41% to 60% Funded":"355","61% to 80% Funded":"95","81% to 99% Funded":"39"},
+{"category":"Art","LaunchedProjects":"10943","TotalDollars":"$31.31 M","SuccessfulDollars":"$26.88 M","UnsuccessfulDollars":"$3.89 M","LiveDollars":"$539.02 K","LiveProjects":"345","SuccessRate":"48.85%","Successfully Funded Projects":"5177","Less than $1,000 Raised":"976","$1,000 to $9,999 Raised":"3591","$10,000 to $19,999 Raised":"418","$20,000 to $99,999 Raised":"182","$100 K to $999,999 Raised":"10","$1 M Raised":"0","Unsuccessfully Funded Projects":"5421","0%Funded":"996","1% to 20% Funded":"3301","21% to 40% Funded":"724","41% to 60% Funded":"276","61% to 80% Funded":"84","81% to 99% Funded":"40"},
+{"category":"Food","LaunchedProjects":"4747","TotalDollars":"$32.36 M","SuccessfulDollars":"$26.50 M","UnsuccessfulDollars":"$5.05 M","LiveDollars":"$808.22 K","LiveProjects":"214","SuccessRate":"40.79%","Successfully Funded Projects":"1849","Less than $1,000 Raised":"84","$1,000 to $9,999 Raised":"926","$10,000 to $19,999 Raised":"475","$20,000 to $99,999 Raised":"345","$100 K to $999,999 Raised":"19","$1 M Raised":"0","Unsuccessfully Funded Projects":"2684","0%Funded":"168","1% to 20% Funded":"1943","21% to 40% Funded":"360","41% to 60% Funded":"147","61% to 80% Funded":"51","81% to 99% Funded":"15"},
+{"category":"Comics","LaunchedProjects":"3345","TotalDollars":"$23.05 M","SuccessfulDollars":"$20.70 M","UnsuccessfulDollars":"$1.72 M","LiveDollars":"$636.31 K","LiveProjects":"142","SuccessRate":"49.02%","Successfully Funded Projects":"1570","Less than $1,000 Raised":"203","$1,000 to $9,999 Raised":"950","$10,000 to $19,999 Raised":"222","$20,000 to $99,999 Raised":"168","$100 K to $999,999 Raised":"26","$1 M Raised":"1","Unsuccessfully Funded Projects":"1633","0%Funded":"172","1% to 20% Funded":"1054","21% to 40% Funded":"259","41% to 60% Funded":"99","61% to 80% Funded":"36","81% to 99% Funded":"13"},
+{"category":"Fashion","LaunchedProjects":"4581","TotalDollars":"$24.10 M","SuccessfulDollars":"$19.68 M","UnsuccessfulDollars":"$3.06 M","LiveDollars":"$1.37 M","LiveProjects":"250","SuccessRate":"29.02%","Successfully Funded Projects":"1257","Less than $1,000 Raised":"131","$1,000 to $9,999 Raised":"716","$10,000 to $19,999 Raised":"197","$20,000 to $99,999 Raised":"184","$100 K to $999,999 Raised":"28","$1 M Raised":"1","Unsuccessfully Funded Projects":"3074","0%Funded":"571","1% to 20% Funded":"1930","21% to 40% Funded":"403","41% to 60% Funded":"93","61% to 80% Funded":"53","81% to 99% Funded":"24"},
+{"category":"Theater","LaunchedProjects":"5319","TotalDollars":"$20.60 M","SuccessfulDollars":"$18.07 M","UnsuccessfulDollars":"$2.21 M","LiveDollars":"$323.33 K","LiveProjects":"97","SuccessRate":"64.42%","Successfully Funded Projects":"3364","Less than $1,000 Raised":"453","$1,000 to $9,999 Raised":"2534","$10,000 to $19,999 Raised":"246","$20,000 to $99,999 Raised":"125","$100 K to $999,999 Raised":"6","$1 M Raised":"0","Unsuccessfully Funded Projects":"1858","0%Funded":"340","1% to 20% Funded":"1118","21% to 40% Funded":"257","41% to 60% Funded":"100","61% to 80% Funded":"29","81% to 99% Funded":"14"},
+{"category":"Photography","LaunchedProjects":"3776","TotalDollars":"$11.68 M","SuccessfulDollars":"$9.80 M","UnsuccessfulDollars":"$1.64 M","LiveDollars":"$239.48 K","LiveProjects":"108","SuccessRate":"36.61%","Successfully Funded Projects":"1343","Less than $1,000 Raised":"210","$1,000 to $9,999 Raised":"885","$10,000 to $19,999 Raised":"169","$20,000 to $99,999 Raised":"78","$100 K to $999,999 Raised":"0","$1 M Raised":"1","Unsuccessfully Funded Projects":"2325","0%Funded":"464","1% to 20% Funded":"1405","21% to 40% Funded":"308","41% to 60% Funded":"96","61% to 80% Funded":"41","81% to 99% Funded":"11"},
+{"category":"Dance","LaunchedProjects":"1606","TotalDollars":"$5.21 M","SuccessfulDollars":"$4.77 M","UnsuccessfulDollars":"$335.80 K","LiveDollars":"$110.18 K","LiveProjects":"47","SuccessRate":"71.20%","Successfully Funded Projects":"1110","Less than $1,000 Raised":"92","$1,000 to $9,999 Raised":"929","$10,000 to $19,999 Raised":"69","$20,000 to $99,999 Raised":"20","$100 K to $999,999 Raised":"0","$1 M Raised":"0","Unsuccessfully Funded Projects":"449","0%Funded":"75","1% to 20% Funded":"262","21% to 40% Funded":"65","41% to 60% Funded":"35","61% to 80% Funded":"9","81% to 99% Funded":"3"}
+
+	]};
+
+	var data = da.ta;
+	var circScale = ["12000","1000","1000"];
+
+	var margin = {top:0,right:0,bot:0,left:50},
+		width = 1200, // 960
+		height = 650;		 // 500, -margin.top-margin.bot
+
+	var x = d3.scale.ordinal().rangeRoundBands([0,width-55],.1); // - 70 originally, changes the x axis label positions
+	var y = d3.scale.ordinal().rangeRoundBands([height,0],.1);
+
+	var xAxis = d3.svg.axis().scale(x).orient("bottom");
+
+	var totalProjects = 0;
+
+	data.forEach(function(d){
+		d.LaunchedProjects = +d.LaunchedProjects;
+		totalProjects += d.LaunchedProjects;
+	});
+
+	var nodes = data;
+
+	var force = d3.layout.force()
+		.nodes(nodes)
+		.size([width,height])
+		.charge(0)	 // 0 originally
+		.gravity(.24) // .3 originally
+		.on("tick",tick)
+		.start();
+
+	var tip = d3.tip().attr("class","d3-tip").offset([-10,0]).html(function(d,i){
+		var result =  "<center><h4>"+d.category+"</h4><br><strong>Total Projects: </strong>"+d.LaunchedProjects+"<br>";
+		if(i>38)
+			result += "<strong>Successfull: </strong>"+d['Successfully Funded Projects'];
+		else if(i>25){
+			var num = +d['41% to 60% Funded'];
+			num += +d['21% to 40% Funded'];
+			num+= +d['81% to 99% Funded'];
+			num+= +d['61% to 80% Funded'];
+			num += +d['81% to 99% Funded'];
+			result += "<strong>21%-99%: </strong>"+num;
+		}
+		else if(i>12)
+			result += "<strong>1%-20%: </strong>"+d['1% to 20% Funded'];
+		else
+			result += "<strong>0%: </strong>"+d['0%Funded'];
+
+		return result;			
+	});
+
+	var categories = [];
+	data.forEach(function(d,i) {
+		if(i<13)
+			categories.push(d.category);
+	});
+
+	x.domain(categories);
+	y.domain(["0%","1%-20%", "21%-99%", "Successfull"]);
+
+	var radiusMod = 5*(height)/(totalProjects);
+
+	// this is where shit moves
+	var svg = d3.select("body").append("svg")
+		.attr("width",width+margin.right+margin.left)
+		.attr("height",height+margin.top+margin.bot)
+		.append("g")
+		.attr("transform","translate("+margin.left+","+margin.top+")")
+		.attr("width",width).attr("height",height);
+
+	svg.call(tip);
+
+	var node = svg.selectAll(".node").data(nodes).enter().append("circle").attr("class","node")
+		.attr("r",function(d,i){
+			var choice = 0;
+			if(i > 12) {
+				choice = 1;
+
+				if(i > 25)
+					choice = 2;
+				if(i > 38)
+					choice = 3;
+			}	
+		
+			switch(choice) {
+
+				// legend, color scheme implementation
+				case 0: 
+					d.r = +d['0%Funded'] * radiusMod;	
+					d.color =  "#c42222"; // #b71515
+					break;
+				case 1: 
+					d.r = +d['1% to 20% Funded'] * radiusMod;
+					d.color = "#bf5fff";
+					break;
+				case 2: 
+					d.r = +d['41% to 60% Funded'] * radiusMod;
+					d.r += +d['21% to 40% Funded'] * radiusMod;
+					d.r += +d['81% to 99% Funded'] * radiusMod;
+					d.r += +d['61% to 80% Funded'] * radiusMod;
+					d.r += +d['81% to 99% Funded'] * radiusMod;
+					d.color = "#96cdcd";
+					break;
+				case 3:
+					d.r = +d['Successfully Funded Projects'] * radiusMod;
+					d.color = "#afe061";
+					break;
+			}
+
+			return d.r;
+		}).attr("cx",function(d){return d.x;}).attr("cy",function(d){return d.y;})
+		.style("fill",function(d,i){return d.color;}).style("opacity",.95)
+		.style("stroke","#bebebe").style("stroke-width","1px") // stroke original: 1.5
+		.on('mouseover',tip.show).on('mouseout',tip.hide);
+	/*
+	// REPLACED WITH HTML/CSS
+	// where he creates the legend's squares
+	var circLegend = svg.selectAll(".circLegend").data(circScale).enter().append("g");
+	
+	var legend = svg.selectAll(legend).data([nodes[0],nodes[13],nodes[26],nodes[39]].reverse()).enter().append("g")
+		.attr("transform",function(d,i){return "translate(0,"+i*28+")";}).attr("class","legend"); // translate.. 18 orig
+	
+	legend.append("rect").attr("x",width-994).attr("y",40).attr("width",18).attr("height",18)// height, width = 18 orig
+		.style("fill",function(d){return d.color;});
+
+	legend.append("text").attr("x",width-965).attr("y",54).style("text-anchor","start") // y = 12 orig, text-anchor "end"
+		.text(function(d,i){
+			if(i==3)
+				return "0% Funded";
+			else if(i==2)
+				return "1%-20% Funded";
+			else if(i==1)
+				return "21%-99% Funded";
+			else 
+				return "Successfully Funded";
+		});
+	*/
+	var check = false;
+	d3.select(".button-categories").on("click",change); // 1st param -> change
+	//d3.select(".button-all").on("click", change); // the transform back to initial state needs to be implemented
+	$(".button-all").on('click', function() {
+		//$("table").fadeOut(800);
+		setTimeout(change, 800);
+	});
+	var botAxis = svg.append("g").call(xAxis).attr("class","x axis").attr("transform","translate("+width*2+","+height+")");
+
+	function change() {
+		check = !check;
+
+		if(!check){
+			force.resume();
+			svg.selectAll(".x.axis").transition().duration(2000).attr("transform","translate("+width*2+","+(height)+")");
+		}
+		else {
+			force.stop();
+			var transition = svg.transition().duration(2200),
+			//	delay = function(d,i){return i*20;};
+				delay = 0;
+
+			transition.selectAll(".node").delay(delay).attr("cx",function(d,i) {	
+				return d.x = (x.rangeBand() + 6)*(i%13) + 45;
+			}).attr("cy",function(d,i) {				
+				if(i>38)
+					return d.y = y.rangeBand()*1 ;
+				else if(i>25)
+					return d.y = y.rangeBand()*2;
+				else if(i>12)
+					return d.y = y.rangeBand()*3;
+				else
+					return d.y = y.rangeBand()*4;
+			});
+			svg.selectAll(".x.axis").transition().duration(2000).attr("transform","translate(0,"+height+")");
+		}
+	}
+
+	function tick(e) {
+		if(!check) {
+			var k = 12 * e.alpha;
+			nodes.forEach(function(o,i) {
+				if(i > 38){
+					//o.y -= 1.8*k;
+					if(o.r<15) {
+						o.y -= 3*k;
+						if(i%2==0) o.x += 0.05 * (i-38)*k;
+						else o.x -= 0.05 * (i-38)*k;
+					}
+					else if (o.r<40){
+						o.y -= 0.6*k;
+						if(i%2 == 0) o.x += 1.8*k;
+						else o.x -= 2.1*k;
+					}
+					else o.y -= 1.5*k;
+				}
+				else if(i>25){
+					o.y -= k*0.5;
+					if(o.r > 10) o.y -= k*0.2;
+					if(i%2 == 0) o.x += 0.1 * (i-25)*k;
+					else o.x -= 0.1 * (i-25)*k;
+				}
+				else if(i>12){
+					//o.y+=k*1.0;
+					if(o.r > 50){
+						o.y += 0.6*k;
+						o.x -= 0.45*k;
+					}
+					else if (o.r > 13){
+						o.y += 0.6*k;
+						o.x += 0.55*k;
+					}
+					else{
+						o.y += 0.0*k;
+						if(i%2 == 0 ) o.x += 0.1*(i-12)*k;
+						else o.x -= 0.1*(i-12)*k;
+					}
+				}
+				else{
+					o.y+=1.6*k;
+					o.x += 0.09*k;
+					if(i%2 == 0) o.x += 0.05*i*k;
+					else o.x -= 0.05*i*k;
+				}
+			});
+		}
+
+		node.each(collide(.01)) // originally 
+			.attr("cx",function(d){return d.x;})
+			.attr("cy",function(d){return d.y;});	
+
+	}
+
+	function collide(alpha) {
+		var quadtree = d3.geom.quadtree(nodes);
+
+		return function(d) {
+			var r = d.r + 7,
+				nx1 = d.x -r,
+				nx2 = d.x +r,
+				ny1 = d.y -r,
+				ny2 = d.y +r;
+
+			quadtree.visit(function(quad,x1,y1,x2,y2) {
+				if(quad.point && (quad.point != d)) {
+					var x = d.x - quad.point.x,
+						y = d.y - quad.point.y,
+						l = Math.sqrt(x*x + y*y),
+						r = d.r + quad.point.r;
+
+					if(l < r) {
+						l = (l-r)/l * alpha;
+						d.x -= x *= l;
+						d.y -= y *= l;
+						quad.point.x += x;
+						quad.point.y += y;
+					}
+				}
+
+				return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+			});
+		};
+	}
+
+</script>
+
+</body>
+</html>

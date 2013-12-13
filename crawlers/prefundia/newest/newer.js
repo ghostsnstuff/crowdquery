@@ -66,6 +66,8 @@ function isProjectLink(data) {
 	for(var i = 0; i < 29; i++) {
 		chunk += data[i];
 	}
+	//'http://prefundia.com/projects/view/the-zip-tie/280/'
+
 	if(chunk === 'http://prefundia.com/projects') {
 		return true;
 	} else {

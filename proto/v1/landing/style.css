@@ -1,0 +1,149 @@
+body {
+	font-family:helvetica;
+	font-size:13px;
+	margin:auto;
+	color:#7B838A;
+}
+
+#line {
+	height:3px;
+	background-color:#afe061;
+}
+
+.landing-navigation {
+	cursor:pointer;
+	
+}
+
+.landing-navigation:hover {
+	text-decoration:underline;
+}
+
+td {
+	border-right:1px dotted #eee;
+	padding-right:10px;
+	padding-left:10px;
+}
+
+#header {
+	border:0px solid black;
+	margin-top:25px;
+	width:220px;
+	position:relative;
+	float:right;
+	margin-right:35px;
+}
+
+
+/* RIGHT MIDDLE CONTAINER */
+
+#right-middle-container {
+	border:0px solid blue;
+	width:525px;
+	height:300px;
+	position:relative;
+	left:570px;
+	top:160px;
+}
+
+img {
+	border:0px solid brown;
+	height:75px; /* 60 */
+	width:75px; /* 260 */
+	position:relative;
+	left:218px;
+	top:38px; /* 45 */
+}
+
+/* empowering creators with data */
+#crowdquery-tagline {
+	border:0px solid red;
+	font-size:24px;
+	font-weight:lighter;
+	color:#acacac; /* 6B7175 */
+	width:335px;
+	position:relative;
+	left:85px;
+	top:40px;
+}
+
+/* consists of sign-up button, and sign-in link */
+#sign-in-container {
+	position:relative;
+	top:17.5px;
+	left:120px;
+	width:267.5px;
+	border:0px solid green;
+}
+
+
+input {
+	font-size:14px;
+	color:white;
+	
+	margin-top:40px;
+	margin-left:20px;
+	padding:5px 16px;
+	width:225px;
+	height:45px;
+	
+	background-color:#afe061;
+	border-radius:3px;
+	border:1px solid #9ac639;
+	border-top:1px solid #9dc62c;	/* lighter than button color : c2ed70*/
+	border-bottom:1px solid #8ebc2a; /* darker than button color */
+	
+	background:-webkit-gradient(linear, left top, left bottom, from(#afe061), to(#98d326)); /* #98ea39 -> #82cc21 */
+	text-shadow:rgba(0,0,0,0.2) 0 1px 0;
+	text-shadow: rgba(0,0,0,0.2) 0 1px 0;
+	box-shadow: 0px 1px 1px #ccc;
+
+	/*-webkit-box-shadow:0 1px 0 #ddd, inset 0 1px 0;
+	box-shadow:0 1px 0 #ddd, inset 0 1px 0;*/
+}
+
+/* 
+ make subtle change in background contrast 
+ increase border darkness 
+ */
+input:hover {
+	cursor:pointer;
+	background:-webkit-gradient(linear, left top, left bottom, from(#abe545), to(#a8d830)); /* #98ea39 -> #82cc21 */
+	border-bottom:1px solid #8cb224;
+	border-right:1px solid #8cb224;
+}
+
+/* remove blue outline thingy */
+input:focus {
+	outline:0;
+}
+
+/* sign in stuff */
+
+#sign-in {
+	border:0px solid blue;
+	height:40px;
+	width:83px;
+	position:relative;
+	left:90px;
+}
+
+#sign-in p {
+	float:left;
+	margin: 16px 4px;
+	color:#7B838A;
+	font-size:14px;
+}
+
+#sign-in a {
+	text-decoration:none;
+	letter-spacing:1px;
+	color:#a6cc32;
+	font-weight:lighter;
+}
+
+#sign-in a:hover {
+	text-decoration:underline;
+}
+
+
